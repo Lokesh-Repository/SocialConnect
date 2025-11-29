@@ -67,6 +67,14 @@ export default function PostCard({ post }: { post: Post }) {
   const [deleting, setDeleting] = useState(false)
   
   const isOwner = user?.id === post.user.id
+  
+  // Debug logging
+  console.log('PostCard Debug:', {
+    currentUserId: user?.id,
+    postUserId: post.user.id,
+    isOwner,
+    postUserUsername: post.user.username
+  })
 
   const handleLike = async () => {
     try {
