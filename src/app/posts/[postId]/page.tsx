@@ -202,7 +202,7 @@ export default function PostPage() {
                           {comment.user.fullName || comment.user.username}
                         </Link>
                         <span className="text-xs text-muted-foreground">
-                          {new Date(comment.createdAt).toLocaleDateString()}
+                          {new Date(comment.created_at).toLocaleDateString()}
                         </span>
                       </div>
                       <p className="mt-1">{comment.content}</p>
