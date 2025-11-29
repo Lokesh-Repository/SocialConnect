@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { useAuth } from '@/hooks/useAuth'
 import Navbar from '@/components/Navbar'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Loader2, Users, FileText, Heart, MessageCircle, Shield } from 'lucide-react'
 
 export default function AdminPage() {
@@ -248,15 +250,21 @@ export default function AdminPage() {
                 <div className="space-y-4">
                   {users.map((user: any) => (
                     <div key={user.id} className="flex items-center justify-between pb-4 border-b last:border-0">
-                      <div>
-                        <p className="font-semibold">{user.full_name || user.username}</p>
-                        <p className="text-sm text-muted-foreground">@{user.username}</p>
-                        <p className="text-xs text-muted-foreground">{user.email}</p>
-                        {user.last_login && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Last login: {new Date(user.last_login).toLocaleString()}
-                          </p>
-                        )}
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-12 h-12">
+                          <AvatarImage src={user.avatar_url} alt={user.username} />
+                          <AvatarFallback>{user.username?.charAt(0).toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-semibold">{user.full_name || user.username}</p>
+                          <p className="text-sm text-muted-foreground">@{user.username}</p>
+                          <p className="text-xs text-muted-foreground">{user.email}</p>
+                          {user.last_login && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Last login: {new Date(user.last_login).toLocaleString()}
+                            </p>
+                          )}
+                        </div>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Badge variant={user.is_active ? 'default' : 'secondary'}>
@@ -307,13 +315,25 @@ export default function AdminPage() {
               <CardContent>
                 <div className="space-y-4">
                   {posts.map((post: any) => (
-                    <div key={post.id} className="flex items-start justify-between pb-4 border-b last:border-0">
-                      <div className="flex-1">
-                        <p className="font-semibold">@{post.user?.username || 'Unknown'}</p>
-                        <p className="text-sm mt-1">{post.content?.substring(0, 150)}{post.content?.length > 150 ? '...' : ''}</p>
-                        <div className="flex space-x-4 text-xs text-muted-foreground mt-2">
-                          <span>{post.like_count || 0} likes</span>
-                          <span>{post.comment_count || 0} comments</span>
+                    <div key={post.id} className="flex items-start justify-between gap-4 pb-4 border-b last:border-0">
+                      <div className="flex gap-3 flex-1">
+                        {post.image_url && (
+                          <div className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                            <Image
+                              src={post.image_url}
+                              alt="Post image"
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <p className="font-semibold">@{post.user?.username || 'Unknown'}</p>
+                          <p className="text-sm mt-1">{post.content?.substring(0, 150)}{post.content?.length > 150 ? '...' : ''}</p>
+                          <div className="flex space-x-4 text-xs text-muted-foreground mt-2">
+                            <span>{post.like_count || 0} likes</span>
+                            <span>{post.comment_count || 0} comments</span>
+                          </div>
                         </div>
                       </div>
                       <Button

@@ -28,8 +28,9 @@ export default function LoginPage() {
   }
 
   const handleIdentifierChange = (value: string) => {
-    // Check if input looks like an email
-    const looksLikeEmail = value.includes('@') && value.includes('.')
+    // Check if input looks like an email (has @ not at the start, and text after it with a dot)
+    const emailPattern = /.+@.+\./
+    const looksLikeEmail = emailPattern.test(value)
     setIsEmail(looksLikeEmail)
     
     if (looksLikeEmail) {
@@ -37,8 +38,8 @@ export default function LoginPage() {
       setIdentifier(value)
       setIdentifierError('')
     } else {
-      // It's a username, clean and validate
-      const cleanUsername = value.replace('@', '').toLowerCase()
+      // It's a username, strip @ only if it's the first character
+      const cleanUsername = value.startsWith('@') ? value.slice(1).toLowerCase() : value.toLowerCase()
       setIdentifier(cleanUsername)
       
       // Validate username format

@@ -190,13 +190,12 @@ export default function PostCard({ post }: { post: Post }) {
         )}
 
         {post.imageUrl && (
-          <div className="rounded-lg overflow-hidden">
+          <div className="relative w-full h-96 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
             <Image
               src={post.imageUrl}
               alt="Post image"
-              width={600}
-              height={400}
-              className="w-full h-auto"
+              fill
+              className="object-contain"
             />
           </div>
         )}
