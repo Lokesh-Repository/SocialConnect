@@ -18,8 +18,6 @@ export default function RegisterPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
-  const [emailLocked, setEmailLocked] = useState(false)
-  const [usernameLocked, setUsernameLocked] = useState(false)
   const [usernameError, setUsernameError] = useState('')
 
   const validateUsername = (username: string): string => {
@@ -38,24 +36,6 @@ export default function RegisterPage() {
     // Validate username
     const error = validateUsername(cleanUsername)
     setUsernameError(error)
-    
-    // Lock email if username is entered
-    if (cleanUsername.length > 0) {
-      setEmailLocked(true)
-    } else {
-      setEmailLocked(false)
-    }
-  }
-
-  const handleEmailChange = (value: string) => {
-    setFormData({ ...formData, email: value })
-    
-    // Lock username if email is entered
-    if (value.length > 0) {
-      setUsernameLocked(true)
-    } else {
-      setUsernameLocked(false)
-    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -162,8 +142,7 @@ export default function RegisterPage() {
                 placeholder="johndoe (3-30 chars, letters, numbers, underscore)"
                 value={formData.username}
                 onChange={(e) => handleUsernameChange(e.target.value)}
-                disabled={usernameLocked}
-                required={!emailLocked}
+                required
                 className={usernameError ? 'border-destructive' : ''}
               />
               {usernameError && (
@@ -171,12 +150,7 @@ export default function RegisterPage() {
                   {usernameError}
                 </p>
               )}
-              {usernameLocked && !usernameError && (
-                <p className="text-xs text-muted-foreground">
-                  Clear email to enter username
-                </p>
-              )}
-              {!usernameLocked && !usernameError && formData.username.length >= 3 && (
+              {!usernameError && formData.username.length >= 3 && (
                 <p className="text-xs text-green-600">
                   ✓ Username is valid
                 </p>
@@ -190,15 +164,9 @@ export default function RegisterPage() {
                 type="email"
                 placeholder="you@example.com"
                 value={formData.email}
-                onChange={(e) => handleEmailChange(e.target.value)}
-                disabled={emailLocked}
-                required={!usernameLocked}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
               />
-              {emailLocked && (
-                <p className="text-xs text-muted-foreground">
-                  Clear username to enter email
-                </p>
-              )}
             </div>
 
             <div className="space-y-2">
